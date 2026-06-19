@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citanova | Premium Financial Information Consultancy</title>
+    <style>
+        /* Global Color Variables */
+        :root {
+            --main-blue: #0F52BA;
+            --emerald-green: #27AE60;
+            --burgundy-red: #C0392B;
+            --matte-gold: #D4AF37;
+            --light-gray-text: #F0F4F9;
+            --nav-dark-gray: #17202A;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+        }
+        body {
+            background-color: var(--matte-gold);
+            color: var(--light-gray-text);
+            overflow-x: hidden;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        ul {
+            list-style: none;
+        }
+        button, input, textarea {
+            border: none;
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* Fixed Side Advertisement Bars - Movable & Closable */
+        .side-ad {
+            position: fixed;
+            top: 30%;
+            width: 140px;
+            background: var(--nav-dark-gray);
+            border: 2px solid var(--matte-gold);
+            padding: 12px;
+            z-index: 999;
+            border-radius: 8px;
+            cursor: grab;
+            user-select: none;
+        }
+        .side-ad:active { cursor: grabbing; }
+        .ad-left { left: 10px; }
+        .ad-right { right: 10px; }
+        .ad-close {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: var(--burgundy-red);
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .ad-img {
+            width: 100%;
+            border-radius: 4px;
+            margin: 8px 0;
+        }
+        .ad-text {
+            font-size: 12px;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        /* Navigation Header */
+        header {
+            background-color: var(--nav-dark-gray);
+            position: sticky;
+            top: 0;
+            z-index: 998;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+        }
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+        }
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--matte-gold);
+            letter-spacing: 1px;
+        }
+        .logo span { color: var(--emerald-green); }
+        .main-nav ul {
+            display: flex;
+            gap: 35px;
+        }
+        .main-nav a {
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        .main-nav a:hover {
+            background: var(--main-blue);
+            color: white;
+        }
+        .main-nav a.active {
+            background: var(--main-blue);
+            color: white;
+        }
+        /* Mobile Nav Toggle */
+        .mobile-menu-btn {
+            display: none;
+            font-size: 28px;
+            color: var(--light-gray-text);
+        }
+        .mobile-nav {
+            display: none;
+            flex-direction: column;
+            background: var(--nav-dark-gray);
+            padding: 20px 30px;
+            gap: 18px;
+        }
+        .mobile-nav a {
+            padding: 10px;
+            border-left: 3px solid transparent;
+        }
+        .mobile-nav a.active {
+            border-left-color: var(--matte-gold);
+            color: var(--matte-gold);
+        }
+
+        /* Page Section Base Style - All Subpages Hidden By Default */
+        .page-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px 30px;
+            min-height: calc(100vh - 86px);
+            display: none;
+        }
+        .page-section.active { display: block; }
+        .section-heading {
+            font-size: 42px;
+            color: var(--nav-dark-gray);
+            margin-bottom: 30px;
+            border-left: 6px solid var(--main-blue);
+            padding-left: 16px;
+        }
+        .section-subhead {
+            font-size: 22px;
+            color: var(--main-blue);
+            margin: 20px 0 12px;
+        }
+        .content-card {
+            background: var(--nav-dark-gray);
+            padding: 35px;
+            border-radius: 12px;
+            margin: 25px 0;
+            box-shadow: 0 6px 20px rgba(15, 82, 186, 0.25);
+        }
+        .global-img {
+            width: 100%;
+            max-width: 900px;
+            border-radius: 10px;
+            margin: 20px auto;
+            display: block;
+            border: 3px solid var(--matte-gold);
+        }
+        .two-col-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        /* 新增：客户案例样式 */
+        .case-item {
+            border-top: 2px solid var(--matte-gold);
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+        .case-item h5 {
+            color: var(--emerald-green);
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+        /* 新增：团队成员卡片样式 */
+        .team-member {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .team-member h4 {
+            color: var(--matte-gold);
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        .team-member .role {
+            color: var(--emerald-green);
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        /* Homepage Hero Area */
+        .hero-banner {
+            background: linear-gradient(135deg, var(--main-blue) 0%, #083470 100%);
+            padding: 80px 20px;
+            text-align: center;
+            border-radius: 14px;
+            margin-bottom: 40px;
+        }
+        .hero-banner h1 {
+            font-size: 52px;
+            margin-bottom: 18px;
+            color: white;
+        }
+        .hero-banner p {
+            font-size: 19px;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            opacity: 0.95;
+        }
+        .hero-cta {
+            background: var(--burgundy-red);
+            padding: 14px 32px;
+            font-size: 17px;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        .hero-cta:hover { background: #942a1e; }
+
+        /* Service List Style */
+        .service-item {
+            border-left: 4px solid var(--emerald-green);
+            padding: 16px 20px;
+            background: rgba(23, 32, 42, 0.8);
+            margin: 15px 0;
+            border-radius: 0 6px 6px 0;
+        }
+        .service-item h4 { color: var(--matte-gold); font-size: 20px; margin-bottom: 8px; }
+
+        /* Contact Form Style */
+        .contact-form input, .contact-form textarea {
+            width: 100%;
+            padding: 14px;
+            margin: 10px 0;
+            border-radius: 6px;
+            background: #fff;
+            color: var(--nav-dark-gray);
+            font-size: 15px;
+        }
+        .submit-btn {
+            background: var(--emerald-green);
+            width: 100%;
+            padding: 15px;
+            font-size: 17px;
+            font-weight: 600;
+            border-radius: 6px;
+            margin-top: 12px;
+            transition: background 0.3s;
+        }
+        .submit-btn:hover { background: #1f8d4d; }
+        .success-alert {
+            background: var(--emerald-green);
+            text-align: center;
+            padding: 16px;
+            border-radius: 6px;
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: 600;
+            display: none;
+        }
+        .contact-info-block p {
+            font-size: 17px;
+            line-height: 1.8;
+            margin: 10px 0;
+        }
+        .contact-info-block strong { color: var(--matte-gold); min-width: 130px; display: inline-block; }
+
+        /* Footer */
+        footer {
+            background: var(--nav-dark-gray);
+            text-align: center;
+            padding: 30px;
+            margin-top: 50px;
+        }
+        footer p { font-size: 14px; opacity: 0.8; }
+
+        /* Responsive Mobile Adjustment */
+        @media (max-width: 992px) {
+            .two-col-grid { grid-template-columns: 1fr; }
+            .section-heading { font-size: 32px; }
+            .hero-banner h1 { font-size: 38px; }
+            .side-ad { width: 110px; font-size: 10px; }
+        }
+        @media (max-width: 768px) {
+            .main-nav { display: none; }
+            .mobile-menu-btn { display: block; }
+            .nav-container { padding: 15px 20px; }
+            .side-ad { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Movable & Closable Left Side Advertisement -->
+    <div class="side-ad ad-left" id="adLeft">
+        <button class="ad-close" onclick="closeAd('adLeft')">×</button>
+        <img class="ad-img" src="https://santosveraluciabaleeiro724-cmd.github.io/373-8/89.jpg" alt="Ad Banner">
+        <p class="ad-text">Exclusive Financial Consultancy Packages</p>
+    </div>
+    <!-- Movable & Closable Right Side Advertisement -->
+    <div class="side-ad ad-right" id="adRight">
+        <button class="ad-close" onclick="closeAd('adRight')">×</button>
+        <img class="ad-img" src="https://santosveraluciabaleeiro724-cmd.github.io/373-8/90.jpg" alt="Promo Ad">
+        <p class="ad-text">Free Initial Consultation For New Clients</p>
+    </div>
+
+    <!-- Navigation Header -->
+    <header>
+        <div class="nav-container">
+            <div class="logo">Citanova <span>Finance</span></div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#home" class="nav-link active" data-page="home">Home</a></li>
+                    <li><a href="#about" class="nav-link" data-page="about">About Us</a></li>
+                    <li><a href="#services" class="nav-link" data-page="services">Our Services</a></li>
+                    <li><a href="#team" class="nav-link" data-page="team">Our Team</a></li>
+                    <li><a href="#contact" class="nav-link" data-page="contact">Contact Us</a></li>
+                </ul>
+            </nav>
+            <button class="mobile-menu-btn" onclick="toggleMobileNav()">☰</button>
+        </div>
+        <!-- Mobile Navigation Dropdown -->
+        <div class="mobile-nav" id="mobileNav">
+            <a href="#home" class="nav-link active" data-page="home">Home</a>
+            <a href="#about" class="nav-link" data-page="about">About Us</a>
+            <a href="#services" class="nav-link" data-page="services">Our Services</a>
+            <a href="#team" class="nav-link" data-page="team">Our Team</a>
+            <a href="#contact" class="nav-link" data-page="contact">Contact Us</a>
+        </div>
+    </header>
+
+    <!-- Homepage Section -->
+    <section class="page-section active" id="home">
+        <div class="hero-banner">
+            <h1>Citanova Financial Information Consultancy</h1>
+            <p>Delivering high-end, data-driven financial advisory solutions for enterprises, institutional investors and private clients across the United Kingdom and Europe.</p>
+            <img class="global-img" src="https://santosveraluciabaleeiro724-cmd.github.io/373-8/91.jpg" alt="Citanova Finance Hero Visual">
+            <br>
+            <a href="#contact" class="hero-cta nav-link" data-page="contact">Book A Free Consultation</a>
+        </div>
+        <h2 class="section-heading">Why Choose Citanova</h2>
+        <div class="two-col-grid">
+            <div class="content-card">
+                <h3 class="section-subhead">Industry Expertise</h3>
+                <p>Our senior analysts hold decades of experience in global capital markets, asset allocation, risk assessment and cross-border financial compliance. We provide tailored intelligence reports aligned with your investment objectives.</p>
+                <div class="case-item">
+                    <h5>Client Success Example</h5>
+                    <p>We supported a mid-sized UK manufacturing firm in reallocating £2.4M in surplus capital, achieving a 12.7% annual return through diversified asset allocation – 4.2% above market average for their risk profile.</p>
+                </div>
+            </div>
+            <div class="content-card">
+                <h3 class="section-subhead">Real-Time Market Data</h3>
+                <p>Access verified, low-latency financial information covering equities, foreign exchange, commodities and alternative assets, with customised dashboards and periodic market briefings.</p>
+                <p>Our data feeds integrate with 18 global exchanges, providing real-time pricing, volume analysis and volatility metrics updated every 100ms – critical for active traders and institutional clients.</p>
+            </div>
+        </div>
+        <img class="global-img" src="https://santosveraluciabaleeiro724-cmd.github.io/373-8/92.jpg" alt="Financial Market Analytics">
+        <div class="content-card">
+            <h3 class="section-subhead">Global Client Coverage</h3>
+            <p>Headquartered in Liverpool, England, we serve local SMEs, international investment firms, family offices and individual high-net-worth clients with confidential, bespoke financial consulting services.</p>
+            <p>Our client base spans 12 European countries, with dedicated multilingual advisors (English, German, French, Spanish) to support cross-border transactions and regulatory compliance across jurisdictions.</p>
+            <p>We maintain ISO 27001 certification for data security, ensuring client financial information remains protected to the highest international standards.</p>
+        </div>
+    </section>
+
+    <!-- About Us Page -->
+    <section class="page-section" id="about">
+        <h2 class="section-heading">About Citanova</h2>
+        <img class="global-img" src="https://santosveraluciabaleeiro724-cmd.github.io/373-8/93.jpg" alt="Citanova Office Liverpool">
+        <div class="content-card">
+            <h3 class="section-subhead">Company Overview</h3>
+            <p>Citanova is a premium independent financial information consultancy firm registered and operated from Liverpool, United Kingdom. Founded in 2015 to bridge the gap between fragmented market data and actionable investment strategy, we specialise in transparent, unbiased financial intelligence for all client tiers.</p>
+            <br>
+            <p>We adhere to strict UK financial ethics standards, prioritising data accuracy, client confidentiality and long-term partnership over short-term transaction gains. Our multi-disciplinary team combines quantitative analysts, compliance specialists and macroeconomic researchers to deliver comprehensive advisory output.</p>
+            <br>
+            <p>Since inception, we have grown from a 3-person boutique firm to a team of 28 financial professionals, managing over £450M in client assets across our advisory portfolios and maintaining a 98% client retention rate – a testament to our commitment to results and relationship-building.</p>
+        </div>
+        <div class="two-col-grid">
+            <div class="content-card">
+                <h3 class="section-subhead">Our Mission</h3>
+                <p>To empower every client with clear, reliable financial information that reduces investment uncertainty and supports sustainable wealth growth across volatile global markets.</p>
+                <p>We believe that financial literacy and access to quality market intelligence should not be exclusive to large institutions – our mission is to democratise high-level financial advisory while maintaining the rigour and precision demanded by institutional clients.</p>
+            </div>
+            <div class="content-card">
+                <h3 class="section-subhead">Our Core Values</h3>
+                <ul style="margin-top:12px; line-height:1.8;">
+                    <li>• Data Integrity & Transparency – All our analysis is sourced from verified, auditable data providers with full disclosure of methodologies</li>
+                    <li>• Client-Centric Confidentiality – We never share client data or investment strategies with third parties, with non-disclosure agreements standard for all engagements</li>
+                    <li>• Independent Unbiased Analysis – No commission-based incentives; our recommendations are solely based on client goals and market conditions</li>
+                    <li>• Continuous Market Innovation – We invest 15% of annual revenue in proprietary analytics tools to stay ahead of market trends</li>
+                    <li>• Regulatory Compliance Excellence – Our compliance team updates policies monthly to align with FCA and EU financial regulations</li>
+                </ul>
+            </div>
+        </div>
+        <div class="content-card">
+            <h3 class="section-subhead">Our Growth & Milestones</h3>
+            <ul style="line-height:2;">
+                <li>• 2015: Founded in Liverpool's business district with focus on SME financial advisory</li>
+                <li>• 2017: Expanded to institutional market intelligence, onboarding first FTSE 250 client</li>
+                <li>• 2019: Launched real-time market data feed platform for active traders</li>
+                <li>• 2021: Achieved ISO 27001 certification for information security</li>
+                <li>• 2023: Expanded European reach with satellite offices in Frankfurt and Paris</li>
+                <li>• 2024: Recognised as "Best Independent Financial Consultancy" by UK Finance Awards</li>
+            </ul>
+        </div>
+        <img class="global-img" src="https://santosveraluciabaleeiro724-cmd.github.io/373-8/94.jpg" alt="Citanova Corporate Values Visual">
+    </section>
+
+    <!-- Our Services Page -->
+    <section class="page-section" id="services">
+        <h2 class="section-heading">Our Financial Consultancy Services</h2>
+        <img class="global-img" src="https://santosveraluciabaleeiro724-cmd.github.io/373-8/95.jpg" alt="Financial Consulting Services">
+        <div class="content-card">
+            <div class="service-item">
+                <h4>1. Institutional Market Intelligence Reports</h4>
+                <p>Custom weekly, monthly and quarterly deep-dive analysis covering global equity markets, macroeconomic trends, interest rate forecasts and geopolitical financial risk mapping.</p>
+                <p>Each report includes: 5+ proprietary market indicators, comparative analysis against 5-year historical trends, scenario modelling for 3 macroeconomic outcomes, and actionable recommendations tailored to your institutional risk appetite.</p>
+                <p>Deliverables: Interactive dashboards, PDF briefings, monthly live analyst briefings (in-person or virtual), and ad-hoc alerts for market-moving events.</p>
+            </div>
+            <div class="service-item">
+                <h4>2. Private Client Wealth Advisory</h4>
+                <p>Personalised asset allocation reviews, portfolio risk auditing, cross-border tax information and long-term wealth preservation planning for high-net-worth individuals.</p>
+                <p>Our private client service includes a dedicated wealth advisor, quarterly portfolio reviews, tax optimisation strategies aligned with UK and international tax law, and estate planning integration to ensure intergenerational wealth transfer efficiency.</p>
+                <p>Minimum asset threshold: £500,000 in investable assets (waived for family office clients).</p>
+            </div>
+            <div class="service-item">
+                <h4>3. SME Business Financial Consultancy</h4>
+                <p>Cash flow forecasting, market expansion feasibility studies, capital raising intelligence and industry benchmark financial data for Liverpool and UK small-medium enterprises.</p>
+                <p>We specialise in supporting SMEs in manufacturing, tech, and retail sectors, with services including: 12/24/36-month cash flow modelling, grant/funding identification, competitor financial benchmarking, and pricing strategy optimisation.</p>
+                <p>Success rate: 89% of SME clients report improved cash flow within 6 months of engagement.</p>
+            </div>
+            <div class="service-item">
+                <h4>4. Regulatory & Compliance Information Support</h4>
+                <p>Updated guidance on UK financial regulations, cross-border investment compliance, reporting requirements and risk control framework design.</p>
+                <p>Our compliance team tracks all FCA, PRA and EU regulatory changes, providing proactive updates and implementation support to ensure your business remains compliant. Services include compliance audit preparation, policy drafting, and staff training modules.</p>
+                <p>We also offer Brexit-specific compliance support for UK-EU cross-border transactions.</p>
+            </div>
+            <div class="service-item">
+                <h4>5. Real-Time Custom Market Data Feeds</h4>
+                <p>On-demand filtered market data dashboards, live price tracking, volatility alerts and custom statistical modelling for active traders and investment funds.</p>
+                <p>Customisation options: Asset class filtering (equities, FX, commodities, crypto), alert thresholds (price, volume, volatility), data visualisation preferences, and integration with third-party trading platforms (Bloomberg, Reuters, MetaTrader).</p>
+                <p>Uptime guarantee: 99.98% service availability with 24/7 technical support for enterprise clients.</p>
+            </div>
+        </div>
+        <div class="content-card">
+            <h3 class="section-subhead">Service Pricing & Engagement Models</h3>
+            <div class="two-col-grid">
+                <div>
+                    <h4 style="color: var(--matte-gold); margin-bottom: 10px;">Retainer-Based Model</h4>
+                    <p>For ongoing advisory needs (monthly/quarterly). Includes unlimited consultations, regular reports, and priority support. Ideal for institutional clients and long-term private clients.</p>
+                </div>
+                <div>
+                    <h4 style="color: var(--matte-gold); margin-bottom: 10px;">Project-Based Model</h4>
+                    <p>Fixed-fee for specific projects (e.g., feasibility study, compliance audit, portfolio review). Includes clear deliverables, timelines, and post-project follow-up.</p>
+                </div>
+            </div>
+            <p style="margin-top: 20px;">All service engagements include a free initial consultation (up to 90 minutes) to define objectives, scope, and expected outcomes. No hidden fees – all costs are disclosed in a formal engagement letter prior to work commencement.</p>
+        </div>
+        <img class="global-img" src="https://santosveraluciabaleeiro724-cmd.github.io/373-8/96.jpg" alt="Data Analytics Service Visual">
+    </section>
+
+    <!-- Our Team Page -->
+    <section class="page-section" id="team">
+        <h2 class="section-heading">Meet Our Expert Team</h2>
+        <img class="global-img" src="https://santosveraluciabaleeiro724-cmd.github.io/373-8/97.jpg" alt="Citanova Professional Team">
+        <div class="two-col-grid">
+            <div class="content-card">
+                <h3 class="section-subhead">Senior Market Analysts</h3>
+                <p>Our lead analysts hold master’s degrees in finance, economics and quantitative modelling with front-office experience at London-based investment institutions, specialising in European and global market forecasting.</p>
+                <div class="team-member">
+                    <h4>James Harrington</h4>
+                    <div class="role">Chief Market Analyst</div>
+                    <p>20+ years experience at Barclays Investment Bank and HSBC Global Markets. Specialises in European equity markets and interest rate forecasting. Holds CFA Level 3 and FRM certifications.</p>
+                </div>
+                <div class="team-member">
+                    <h4>Elena Petrova</h4>
+                    <div class="role">Senior Quantitative Analyst</div>
+                    <p>PhD in Financial Mathematics (University of Oxford). Former quantitative modeller at Goldman Sachs. Expert in algorithmic trading strategies and risk modelling.</p>
+                </div>
+            </div>
+            <div class="content-card">
+                <h3 class="section-subhead">Compliance & Risk Specialists</h3>
+                <p>UK regulatory certified professionals focused on financial compliance, anti-money laundering guidance and cross-jurisdiction investment risk evaluation for corporate clients.</p>
+                <div class="team-member">
+                    <h4>Michael O'Connor</h4>
+                    <div class="role">Head of Compliance</div>
+                    <p>15 years experience at the Financial Conduct Authority (FCA). Specialises in UK/EU cross-border compliance and anti-money laundering regulations. Regular speaker at UK finance compliance conferences.</p>
+                </div>
+                <div class="team-member">
+                    <h4>Sarah Jones</h4>
+                    <div class="role">Risk Assessment Director</div>
+                    <p>FRM and PRM certified risk specialist. Former risk manager at Lloyds Banking Group. Expert in credit risk, market risk, and operational risk frameworks for SMEs and institutional clients.</p>
+                </div>
+            </div>
+        </div>
+        <div class="content-card">
+            <h3 class="section-subhead">Client Advisory Managers</h3>
+            <p>Dedicated account managers based at our Liverpool headquarters provide one-on-one support, custom report coordination and ongoing consultation for all service tiers, ensuring consistent communication and rapid response times.</p>
+            <div class="team-member">
+                <h4>David Thompson</h4>
+                <div class="role">Head of Client Advisory</div>
+                <p>12 years in financial client management, specialising in high-net-worth private clients and family offices. Bilingual (English/Spanish) with expertise in cross-border wealth management.</p>
+            </div>
+            <div class="team-member">
+                <h4>Emma Clarke</h4>
+                <div class="role">SME Client Advisory Lead</div>
+                <p>Former SME business consultant at KPMG. Specialises in supporting UK small businesses with financial strategy, cash flow management, and growth planning. Covers Liverpool and North West England region.</p>
+            </div>
+        </div>
+        <div class="content-card">
+            <h3 class="section-subhead">Our Team Culture</h3>
+            <p>We foster a collaborative, research-driven culture where every team member contributes to client outcomes. Our professionals complete 40+ hours of continuing education annually to stay current with market trends, regulatory changes, and analytical methodologies.</p>
+            <p>We prioritise diversity in our team – 45% of our senior leadership are women, and our team speaks 7 languages, enabling us to serve a truly global client base with cultural and linguistic competence.</p>
+        </div>
+        <img class="global-img" src="https://santosveraluciabaleeiro724-cmd.github.io/373-8/98.jpg" alt="Liverpool Office Team Space">
+    </section>
+
+    <!-- Contact Us Page -->
+    <section class="page-section" id="contact">
+        <h2 class="section-heading">Contact Citanova Finance</h2>
+        <img class="global-img" src="https://santosveraluciabaleeiro724-cmd.github.io/373-8/99.jpg" alt="Liverpool Office Location">
+        <div class="two-col-grid">
+            <div class="content-card contact-info-block">
+                <h3 class="section-subhead">Company Information</h3>
+                <p><strong>Office Address:</strong> 63 Bold St, Liverpool, England, United Kingdom, L1 4EZ</p>
+                <p><strong>Phone Number:</strong> +44 7600934739</p>
+                <p><strong>Email Address:</strong> info@citanovafinance.com</p>
+                <p><strong>Business Hours:</strong> Monday – Friday, 09:00 – 18:00 GMT (24/7 emergency support for retainer clients)</p>
+                <p><strong>Consultation Mode:</strong> In-Person Meeting (Liverpool office), Video Call (Zoom/Microsoft Teams), Telephone Advisory, On-Site Consultation (for large corporate clients)</p>
+                <br>
+                <p>Visit our Liverpool headquarters for in-depth financial consultation, or submit the enquiry form beside us to schedule your private advisory session at any time.</p>
+                <p>Our office is located in the heart of Liverpool's business district, 5 minutes walk from Liverpool Central Station and easily accessible by public transport and private car (limited on-site parking available by appointment).</p>
+                <p>For urgent enquiries outside business hours, please call our emergency line: +44 7890 123456 (retainer clients only).</p>
+            </div>
+            <div class="content-card">
+                <h3 class="section-subhead">Send Us An Enquiry</h3>
+                <p style="margin-bottom: 15px;">Please provide detailed information about your consultation needs, and we will respond within 2 business hours (during business hours) to schedule your free initial consultation.</p>
+                <form class="contact-form" id="enquiryForm">
+                    <input type="text" placeholder="Your Full Name" required>
+                    <input type="email" placeholder="Your Email Address" required>
+                    <input type="tel" placeholder="Your Contact Phone" required>
+                    <select style="width:100%; padding:14px; margin:10px 0; border-radius:6px; background:#fff; color:var(--nav-dark-gray); font-size:15px;" required>
+                        <option value="" disabled selected>Select Consultation Type</option>
+                        <option value="private">Private Client Wealth Advisory</option>
+                        <option value="institutional">Institutional Market Intelligence</option>
+                        <option value="sme">SME Financial Consultancy</option>
+                        <option value="compliance">Regulatory & Compliance Support</option>
+                        <option value="data">Market Data Feeds</option>
+                        <option value="general">General Enquiry</option>
+                    </select>
+                    <textarea rows="5" placeholder="Write your message / consultation request here... Please include details about your current financial situation, objectives, and any specific areas you'd like to discuss." required></textarea>
+                    <button type="submit" class="submit-btn">Submit Enquiry</button>
+                </form>
+                <div class="success-alert" id="successMsg">Enquiry Submitted Successfully! We will contact you shortly via email or phone to schedule your free initial consultation.</div>
+            </div>
+        </div>
+        <div class="content-card">
+            <h3 class="section-subhead">Alternative Contact Methods</h3>
+            <div class="two-col-grid">
+                <div>
+                    <h4 style="color: var(--matte-gold); margin-bottom: 10px;">Social Media & Professional Networks</h4>
+                    <ul style="line-height: 1.8;">
+                        <li>• LinkedIn: Citanova Financial Consultancy</li>
+                        <li>• Twitter/X: @CitanovaFinance</li>
+                        <li>• WhatsApp Business: +44 7600 934739</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="color: var(--matte-gold); margin-bottom: 10px;">Postal Mail</h4>
+                    <p>Citanova Financial Information Consultancy<br>
+                    63 Bold St<br>
+                    Liverpool<br>
+                    L1 4EZ<br>
+                    United Kingdom</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Website Footer (No Pagination) -->
+    <footer>
+        <p>&copy; 2026 Citanova Financial Information Consultancy. All Rights Reserved. Registered Office: 63 Bold St, Liverpool, England</p>
+        <p style="margin-top: 10px;">Regulated by the Financial Conduct Authority (FCA) - Registration Number: 123456 | ISO 27001 Certified | VAT Number: GB123456789</p>
+    </footer>
+
+    <script>
+        // Page Navigation Switch Logic
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pageSections = document.querySelectorAll('.page-section');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetPageId = this.getAttribute('data-page');
+                // Remove active state from all links & sections
+                navLinks.forEach(l => l.classList.remove('active'));
+                pageSections.forEach(s => s.classList.remove('active'));
+                // Activate target page and clicked nav link
+                this.classList.add('active');
+                document.getElementById(targetPageId).classList.add('active');
+                // Close mobile nav after click on mobile
+                document.getElementById('mobileNav').style.display = 'none';
+                // Scroll page to top smoothly
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            })
+        });
+
+        // Mobile Navigation Toggle
+        function toggleMobileNav() {
+            const mobileNav = document.getElementById('mobileNav');
+            mobileNav.style.display = mobileNav.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        // Close Side Advertisement Bars
+        function closeAd(adId) {
+            document.getElementById(adId).style.display = 'none';
+        }
+
+        // Draggable Movable Side Ads Logic
+        function makeDraggable(elementId) {
+            const el = document.getElementById(elementId);
+            let dragActive = false;
+            let offsetX, offsetY;
+            el.addEventListener('mousedown', (e) => {
+                if(e.target.classList.contains('ad-close')) return;
+                dragActive = true;
+                offsetX = e.clientX - el.getBoundingClientRect().left;
+                offsetY = e.clientY - el.getBoundingClientRect().top;
+            });
+            document.addEventListener('mousemove', (e) => {
+                if(!dragActive) return;
+                el.style.left = `${e.clientX - offsetX}px`;
+                el.style.top = `${e.clientY - offsetY}px`;
+                el.style.right = 'auto';
+            });
+            document.addEventListener('mouseup', () => dragActive = false);
+        }
+        makeDraggable('adLeft');
+        makeDraggable('adRight');
+
+        // Contact Form Submit - Always show success alert
+        const enquiryForm = document.getElementById('enquiryForm');
+        const successAlert = document.getElementById('successMsg');
+        enquiryForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Show success message regardless of input content
+            successAlert.style.display = 'block';
+            // Reset form fields
+            enquiryForm.reset();
+            // Auto hide success alert after 5 seconds
+            setTimeout(() => { successAlert.style.display = 'none'; }, 5000);
+        });
+    </script>
+</body>
+</html>
